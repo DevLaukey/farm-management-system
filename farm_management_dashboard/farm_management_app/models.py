@@ -1,11 +1,13 @@
 from django.db import models
 from datetime import date
+from django.contrib.auth.models import User
 
 class Crop(models.Model):
     name = models.CharField(max_length=255)
     variety = models.CharField(max_length=255)
     planting_date = models.DateField()
     harvest_date = models.DateField()
+    user_token = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 class Employee(models.Model):
     name = models.CharField(max_length=255)
@@ -13,6 +15,7 @@ class Employee(models.Model):
     position = models.CharField(max_length=255)
     salary = models.DecimalField(max_digits=10, decimal_places=2)
     performance = models.TextField()
+    user_token = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 class Livestock(models.Model):
     animal_type = models.CharField(max_length=255)
@@ -22,6 +25,7 @@ class Livestock(models.Model):
     weight = models.DecimalField(max_digits=10, decimal_places=2)
     purchase_date = models.DateField()
     purchase_price = models.DecimalField(max_digits=10, decimal_places=2)
+    user_token = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def calculate_age_in_months(self):
         today = date.today()
@@ -33,4 +37,16 @@ class Machinery(models.Model):
     equipment_name = models.CharField(max_length=255)
     purchase_price = models.DecimalField(max_digits=10, decimal_places=2)
     purchase_date = models.DateField()
-   
+    user_token = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+class Income(models.Model):
+    description = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField()
+    user_token = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+class Expenditure(models.Model):
+    description = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateField()
+    user_token = models.ForeignKey(User, on_delete=models.CASCADE, null=True)

@@ -1,8 +1,8 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
-from .models import Crop, Employee, Livestock, Machinery
-from .serializers import CropSerializer, EmployeeSerializer, LivestockSerializer, MachinerySerializer, UserSerializer
+from .models import Crop, Employee, Livestock, Machinery, Income, Expenditure
+from .serializers import CropSerializer, EmployeeSerializer, LivestockSerializer, MachinerySerializer, UserSerializer, IncomeSerializer, ExpenditureSerializer
 from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
@@ -22,8 +22,21 @@ class LivestockViewSet(viewsets.ModelViewSet):
 class MachineryViewSet(viewsets.ModelViewSet):
     queryset = Machinery.objects.all()
     serializer_class = MachinerySerializer
+class IncomeViewSet(viewsets.ModelViewSet):
+    queryset = Income.objects.all()
+    serializer_class = IncomeSerializer
 
+class ExpenditureViewSet(viewsets.ModelViewSet):
+    queryset = Expenditure.objects.all()
+    serializer_class = ExpenditureSerializer
 
+class IncomeCreateView(generics.CreateAPIView):
+    queryset = Income.objects.all()
+    serializer_class = IncomeSerializer
+
+class ExpenditureCreateView(generics.CreateAPIView):
+    queryset = Expenditure.objects.all()
+    serializer_class = ExpenditureSerializer
 
 
 class UserRegistrationView(generics.CreateAPIView):
