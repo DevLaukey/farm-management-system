@@ -33,4 +33,5 @@ class CustomRegisterView(RegisterView):
         if response.status_code == status.HTTP_204_NO_CONTENT:
             return Response({'message': 'User created successfully', 'data': request.data}, status=status.HTTP_201_CREATED)
         else:
-            return Response({'message': 'Error creating user', }, status=response.status_code)
+            errors = response.data if hasattr(response, 'data') else None
+            return Response({'message': 'Error creating user', 'errors': errors}, status=response.status_code)

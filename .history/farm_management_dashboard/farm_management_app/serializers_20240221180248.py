@@ -43,6 +43,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         self.cleaned_data = self.get_cleaned_data()
         adapter.save_user(request, user, self)
 
+        # Assuming you are using allauth's email confirmation, you can add the following
         setup_user_email(request, user, [])
 
         self.custom_signup(request, user)

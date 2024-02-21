@@ -21,16 +21,13 @@ class MachineryViewSet(viewsets.ModelViewSet):
     queryset = Machinery.objects.all()
     serializer_class = MachinerySerializer
 
-
 class CustomRegisterView(RegisterView):
     serializer_class = CustomRegisterSerializer
 
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        print(f"Response status code: {response.status_code}")
         
-        print(response)
-        if response.status_code == status.HTTP_204_NO_CONTENT:
+        if response.status_code == status.HTTP_201_CREATED:
             return Response({'message': 'User created successfully', 'data': request.data}, status=status.HTTP_201_CREATED)
         else:
-            return Response({'message': 'Error creating user', }, status=response.status_code)
+            return Response({'message': 'Error creating user', 'errors': response.data}, status=response.status_code)
