@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Crop, Employee, Livestock, Machinery
-from allauth.account.adapter import get_adapter
-from allauth.account.utils import setup_user_email
+from django.contrib.auth.models import User 
 
 
 class CropSerializer(serializers.ModelSerializer):
@@ -23,28 +22,11 @@ class MachinerySerializer(serializers.ModelSerializer):
     class Meta:
         model = Machinery
         fields = '__all__'
-from dj_rest_auth.registration.serializers import RegisterSerializer
-from allauth.account.adapter import get_adapter
 
 
-class CustomRegisterSerializer(RegisterSerializer):
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
+        extra_kwargs = {'password':{'write_only':True, 'required':True}}
 
-    def get_cleaned_data(self):
-        return {
-            'username': self.validated_data.get('username', ''),
-            'password1': self.validated_data.get('password1', ''),
-            'email': self.validated_data.get('email', ''),
-        }
-
-
-    def save(self, request):
-        adapter = get_adapter()
-        user = adapter.new_user(request)
-        self.cleaned_data = self.get_cleaned_data()
-        adapter.save_user(request, user, self)
-
-        setup_user_email(request, user, [])
-
-        self.custom_signup(request, user)
-
-        return user

@@ -16,6 +16,7 @@ class Employee(models.Model):
 
 class Livestock(models.Model):
     animal_type = models.CharField(max_length=255)
+    tag_number = models.CharField(max_length=255, default='N/A')
     breed = models.CharField(max_length=255)
     age = models.IntegerField()
     weight = models.DecimalField(max_digits=10, decimal_places=2)

@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 
 INSTALLED_APPS = [
@@ -43,55 +45,50 @@ INSTALLED_APPS = [
     'farm_management_app',
     'rest_framework',
     'rest_framework.authtoken',
-    'dj_rest_auth', 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'dj_rest_auth.registration',
+    'rest_auth',
     'corsheaders',
 ]
 
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ],
+    ]
 }
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-    'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
-    'ROTATE_REFRESH_TOKENS': True,
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': "secret-key",
-    'VERIFYING_KEY': None,
-    'AUTH_HEADER_TYPES': ('Bearer',),
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
-    'AUTH_TOKEN_CLASSES': ('dj_rest_auth.authentication.AllAuthJWTAuthentication',),
-}
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+#     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+#     'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
+#     'ROTATE_REFRESH_TOKENS': True,
+#     'ALGORITHM': 'HS256',
+#     'SIGNING_KEY': "secret-key",
+#     'VERIFYING_KEY': None,
+#     'AUTH_HEADER_TYPES': ('Bearer',),
+#     'USER_ID_FIELD': 'id',
+#     'USER_ID_CLAIM': 'user_id',
+#     'AUTH_TOKEN_CLASSES': ('dj_rest_auth.authentication.AllAuthJWTAuthentication',),
+# }
 
 
-AUTHENTICATION_CLASSES = (
-    'dj_rest_auth.authentication.AllAuthJWTAuthentication',
-)
+# AUTHENTICATION_CLASSES = (
+#     'dj_rest_auth.authentication.AllAuthJWTAuthentication',
+# )
 
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
+# ACCOUNT_EMAIL_VERIFICATION = 'none'
+# ACCOUNT_AUTHENTICATION_METHOD = 'username'
+# ACCOUNT_EMAIL_REQUIRED = False
+# ACCOUNT_UNIQUE_EMAIL = True
+# ACCOUNT_USERNAME_REQUIRED = True
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 
 
 MIDDLEWARE = [
+     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

@@ -2,8 +2,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import viewsets
 from .models import Crop, Employee, Livestock, Machinery
-from .serializers import CropSerializer, EmployeeSerializer, LivestockSerializer, MachinerySerializer, CustomRegisterSerializer
-from dj_rest_auth.registration.views import RegisterView
+from .serializers import CropSerializer, EmployeeSerializer, LivestockSerializer, MachinerySerializer, UserSerializer
+from django.contrib.auth.models import User
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
 
 class CropViewSet(viewsets.ModelViewSet):
     queryset = Crop.objects.all()
@@ -22,15 +24,21 @@ class MachineryViewSet(viewsets.ModelViewSet):
     serializer_class = MachinerySerializer
 
 
-class CustomRegisterView(RegisterView):
-    serializer_class = CustomRegisterSerializer
 
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        print(f"Response status code: {response.status_code}")
-        
-        print(response)
-        if response.status_code == status.HTTP_204_NO_CONTENT:
-            return Response({'message': 'User created successfully', 'data': request.data}, status=status.HTTP_201_CREATED)
-        else:
-            return Response({'message': 'Error creating user', }, status=response.status_code)
+
+class UserRegistrationView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (AllowAny,)
+
+    def create(self, request, *args, **kwargs):
+        # Override the create method to hash the password before saving the user
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+
+        # Manually set the password, as the serializer only returns hashed passwords
+        user.set_password(request.data['password'])
+        user.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
