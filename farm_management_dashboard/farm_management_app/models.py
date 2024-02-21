@@ -28,8 +28,8 @@ class Livestock(models.Model):
         return purchase_month
 
 class Machinery(models.Model):
+    plate_number = models.CharField(max_length=255, default='N/A')
     equipment_name = models.CharField(max_length=255)
     purchase_price = models.DecimalField(max_digits=10, decimal_places=2)
     purchase_date = models.DateField()
-    maintenance_date = models.DateField()
-    maintenance_cost = models.DecimalField(max_digits=10, decimal_places=2)
+   
